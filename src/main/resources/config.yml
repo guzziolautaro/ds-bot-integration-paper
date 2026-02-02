@@ -1,1 +1,2 @@
-//todo
+port: 8080
+auth-token: "token-here"
