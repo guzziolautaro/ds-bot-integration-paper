@@ -1,0 +1,4 @@
+name: ds-bot-integration
+version: '0.1'
+main: io.github.guzziolautaro.dsBotIntegration.DsBotIntegration
+api-version: '1.21'
