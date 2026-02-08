@@ -3,7 +3,6 @@ package io.github.guzziolautaro.dsBotIntegration;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpServer;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -33,7 +32,17 @@ public final class DsBotIntegration extends JavaPlugin {
             server = HttpServer.create(new InetSocketAddress(this.port), 0);
 
             server.createContext("/bot", exchange -> {
+
                 try {
+
+                    String requesterIp = exchange.getRemoteAddress().getAddress().getHostAddress();
+
+                    String whitelistedIp = getConfig().getString("whitelisted-bot-ip", "none");
+                    if (!whitelistedIp.equals("none") && !requesterIp.equals(whitelistedIp)) {
+                        exchange.sendResponseHeaders(403, -1);
+                        return;
+                    }
+
                     //check auth
                     String authHeader = exchange.getRequestHeaders().getFirst("Authorization");
                     if (authHeader == null || !authHeader.equals("Bearer " + this.authToken)) {
@@ -58,7 +67,7 @@ public final class DsBotIntegration extends JavaPlugin {
 
                     String response;
                     if (commands.containsKey(action)) {
-                        response = commands.get(action).execute(json);
+                        response = commands.get(action).execute(json, requesterIp);
                     } else {
                         response = "Error: Unknown action '" + action + "'";
                     }
@@ -86,6 +95,7 @@ public final class DsBotIntegration extends JavaPlugin {
 
     private void registerCommands() {
         commands.put("status", new StatusCommand());
+        commands.put("sync", new SyncCommand(this));
     }
 
     private void sendHeartbeat() {
