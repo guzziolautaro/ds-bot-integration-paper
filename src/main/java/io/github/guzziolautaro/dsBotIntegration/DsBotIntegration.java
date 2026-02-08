@@ -85,9 +85,7 @@ public final class DsBotIntegration extends JavaPlugin {
     }
 
     private void registerCommands() {
-        commands.put("status", data ->
-                "Online: " + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers());
-        //todo
+        commands.put("status", new StatusCommand());
     }
 
     private void sendHeartbeat() {
