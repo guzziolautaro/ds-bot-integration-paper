@@ -46,13 +46,13 @@ public final class DsBotIntegration extends JavaPlugin {
                     //check auth
                     String authHeader = exchange.getRequestHeaders().getFirst("Authorization");
                     if (authHeader == null || !authHeader.equals("Bearer " + this.authToken)) {
-                        exchange.sendResponseHeaders(403, 0);
+                        exchange.sendResponseHeaders(403, -1);
                         return;
                     }
 
                     //check method
                     if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
-                        exchange.sendResponseHeaders(405, 0);
+                        exchange.sendResponseHeaders(405, -1);
                         return;
                     }
 
@@ -73,14 +73,14 @@ public final class DsBotIntegration extends JavaPlugin {
                     }
 
                     byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
-                    exchange.sendResponseHeaders(200, bytes.length); // Use the length of the byte array
+                    exchange.sendResponseHeaders(200, bytes.length);
                     try (OutputStream os = exchange.getResponseBody()) {
                         os.write(bytes);
                     }
 
                 } catch (Exception e) {
                     getLogger().severe(e.getMessage());
-                    exchange.sendResponseHeaders(500, 0);
+                    exchange.sendResponseHeaders(500, -1);
                 } finally {
                     exchange.close();
                 }
