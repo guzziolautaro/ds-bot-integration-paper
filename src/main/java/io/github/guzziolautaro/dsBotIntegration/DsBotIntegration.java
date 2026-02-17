@@ -25,7 +25,7 @@ public final class DsBotIntegration extends JavaPlugin {
         saveDefaultConfig();
         registerCommands();
 
-        this.port = getConfig().getInt("port", this.port);
+        this.port = getConfig().getInt("port", 8080);
         this.authToken = getConfig().getString("auth-token");
 
         try {
