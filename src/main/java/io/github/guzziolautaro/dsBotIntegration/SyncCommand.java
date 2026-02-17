@@ -12,10 +12,9 @@ public class SyncCommand implements BotCommand {
 
     @Override
     public String execute(JsonObject data, String requesterIp) {
-        // "Finalize the lock" by updating config.yml
         plugin.getConfig().set("whitelisted-bot-ip", requesterIp);
         plugin.saveConfig();
 
-        return "Sync Successful: IP Locked ";
+        return "Sync Successful: IP Locked";
     }
 }
