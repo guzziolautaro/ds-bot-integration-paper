@@ -15,6 +15,9 @@ public class SyncCommand implements BotCommand {
         plugin.getConfig().set("whitelisted-bot-ip", requesterIp);
         plugin.saveConfig();
 
-        return "Sync Successful: IP Locked";
+        JsonObject response = new JsonObject();
+        response.addProperty("status", "success");
+
+        return response.toString();
     }
 }

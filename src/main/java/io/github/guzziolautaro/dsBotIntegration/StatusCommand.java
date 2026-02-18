@@ -7,6 +7,11 @@ public class StatusCommand implements BotCommand{
 
     @Override
     public String execute(JsonObject data, String requesterIp) {
-        return "Online: " + Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers();
+        JsonObject response = new JsonObject();
+
+        response.addProperty("online", Bukkit.getOnlinePlayers().size());
+        response.addProperty("max", Bukkit.getMaxPlayers());
+
+        return response.toString();
     }
 }

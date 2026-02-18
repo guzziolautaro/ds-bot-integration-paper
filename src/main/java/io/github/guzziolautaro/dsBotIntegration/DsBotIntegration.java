@@ -72,6 +72,7 @@ public final class DsBotIntegration extends JavaPlugin {
                         response = "Error: Unknown action '" + action + "'";
                     }
 
+                    exchange.getResponseHeaders().set("Content-Type", "application/json");
                     byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
                     exchange.sendResponseHeaders(200, bytes.length);
                     try (OutputStream os = exchange.getResponseBody()) {
