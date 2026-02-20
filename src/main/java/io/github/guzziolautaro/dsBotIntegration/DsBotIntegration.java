@@ -98,6 +98,7 @@ public final class DsBotIntegration extends JavaPlugin {
         commands.put("status", new StatusCommand());
         commands.put("sync", new SyncCommand(this));
         commands.put("broadcast", new BroadcastCommand());
+        commands.put("whitelist", new WhitelistCommand(this));
     }
 
     private void sendHeartbeat() {
