@@ -1,6 +1,7 @@
 package io.github.guzziolautaro.dsBotIntegration;
 
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,7 +27,7 @@ public class WhitelistCommand implements BotCommand{
         }
 
         switch (data.get("operation").getAsString()) {
-            case "add":
+            case "add": {
                 if (!data.has("name")) {
                     response.addProperty("status", "error");
                     return response.toString();
@@ -47,12 +48,38 @@ public class WhitelistCommand implements BotCommand{
 
                 response.addProperty("status", "success");
                 return response.toString();
-            case "remove":
+            }
+            case "remove": {
+                if (!data.has("name")) {
+                    response.addProperty("status", "error");
+                    return response.toString();
+                }
+
+                String playerName = data.get("name").getAsString();
+                OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
+
+                if (!player.isWhitelisted()) {
+                    response.addProperty("status", "not_found");
+                    return response.toString();
+                }
+
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    player.setWhitelisted(false);
+
+                    if (player.isOnline() && player.getPlayer() != null) {
+                        player.getPlayer().kick(Component.text("You have been removed from the whitelist."));
+                    }
+
+                    plugin.getLogger().info("Successfully removed: " + playerName);
+                });
+
+                response.addProperty("status", "success");
+                return response.toString();
+            }
+            case "list": {
                 //todo
                 break;
-            case "list":
-                //todo
-                break;
+            }
         }
 
         return response.toString();
