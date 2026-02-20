@@ -1,5 +1,6 @@
 package io.github.guzziolautaro.dsBotIntegration;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -77,8 +78,18 @@ public class WhitelistCommand implements BotCommand{
                 return response.toString();
             }
             case "list": {
-                //todo
-                break;
+                JsonArray playersArray = new JsonArray();
+
+                for (OfflinePlayer p : Bukkit.getWhitelistedPlayers()) {
+                    String name = p.getName();
+                    if (name != null) {
+                        playersArray.add(name);
+                    }
+                }
+
+                response.addProperty("status", "success");
+                response.add("players", playersArray);
+                return response.toString();
             }
         }
 
