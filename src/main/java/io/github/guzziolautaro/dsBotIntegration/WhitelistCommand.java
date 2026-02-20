@@ -82,6 +82,7 @@ public class WhitelistCommand implements BotCommand{
             }
         }
 
+        response.addProperty("status", "error");
         return response.toString();
     }
 }
