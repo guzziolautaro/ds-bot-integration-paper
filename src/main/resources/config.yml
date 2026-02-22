@@ -1,3 +1,2 @@
 port: 8080
 auth-token: "token-here"
-whitelisted-bot-ip: "none"

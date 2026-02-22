@@ -5,15 +5,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SyncCommand implements BotCommand {
     private final JavaPlugin plugin;
+    private final DataStorage storage;
 
-    public SyncCommand(JavaPlugin plugin) {
+    public SyncCommand(JavaPlugin plugin, DataStorage storage) {
         this.plugin = plugin;
+        this.storage = storage;
     }
 
     @Override
     public String execute(JsonObject data, String requesterIp) {
-        plugin.getConfig().set("whitelisted-bot-ip", requesterIp);
-        plugin.saveConfig();
+        long guildId = data.get("guild_id").getAsLong();
+
+        storage.save(requesterIp, guildId);
 
         JsonObject response = new JsonObject();
         response.addProperty("status", "success");

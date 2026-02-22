@@ -18,6 +18,7 @@ public final class DsBotIntegration extends JavaPlugin {
     private String authToken;
     private int port;
     private HttpServer server;
+    private DataStorage storage;
     private final Map<String, BotCommand> commands = new HashMap<>();
 
     @Override
@@ -25,6 +26,7 @@ public final class DsBotIntegration extends JavaPlugin {
         saveDefaultConfig();
         registerCommands();
 
+        this.storage = new DataStorage(this);
         this.port = getConfig().getInt("port", 8080);
         this.authToken = getConfig().getString("auth-token");
 
@@ -94,9 +96,13 @@ public final class DsBotIntegration extends JavaPlugin {
         }
     }
 
+    public DataStorage getStorage() {
+        return storage;
+    }
+
     private void registerCommands() {
         commands.put("status", new StatusCommand());
-        commands.put("sync", new SyncCommand(this));
+        commands.put("sync", new SyncCommand(this, this.getStorage()));
         commands.put("broadcast", new BroadcastCommand());
         commands.put("whitelist", new WhitelistCommand(this));
     }
